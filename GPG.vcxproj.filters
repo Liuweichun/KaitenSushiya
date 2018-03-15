@@ -47,6 +47,9 @@
     <Filter Include="Game\Main\GE">
       <UniqueIdentifier>{e0294728-b669-4576-bbe8-b27e38689412}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Main\Scene">
+      <UniqueIdentifier>{050cfcec-4907-4d9e-b42f-e86acd7763f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="myLib.cpp">
@@ -130,6 +133,15 @@
     <ClCompile Include="Task_Gameclear.cpp">
       <Filter>Game\Main</Filter>
     </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>Game\Main\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Game\Main\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameRule.cpp">
+      <Filter>Game\Main\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="myLib.h">
@@ -191,6 +203,15 @@
     </ClInclude>
     <ClInclude Include="easing.h">
       <Filter>Game\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Game\Main\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>Game\Main\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameRule.h">
+      <Filter>Game\Main\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -14,7 +14,7 @@
     <ProjectGuid>{AE9DAA3C-5A61-4935-8FE8-E9DA452516FB}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>GPG</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -42,6 +42,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -97,16 +99,31 @@
     <ClCompile Include="DI2014_Ver3_4.cpp" />
     <ClCompile Include="easing.cpp" />
     <ClCompile Include="GameEngine_Ver3_7.cpp" />
+    <ClCompile Include="GameRule.cpp" />
     <ClCompile Include="MyGameMain.cpp" />
     <ClCompile Include="myLib.cpp" />
     <ClCompile Include="MyPG.cpp" />
-    <ClCompile Include="Task_Game.cpp" />
-    <ClCompile Include="Task_Gameclear.cpp" />
-    <ClCompile Include="Task_Gameover.cpp" />
-    <ClCompile Include="Task_Gamesetsumei.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Task_Game.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Task_Gameclear.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Task_Gameover.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Task_Gamesetsumei.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Task_LC.cpp" />
-    <ClCompile Include="Task_Outsidebusinesshours.cpp" />
-    <ClCompile Include="Task_Title.cpp" />
+    <ClCompile Include="Task_Outsidebusinesshours.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Task_Title.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Title.cpp" />
     <ClCompile Include="WinMain.cpp" />
     <ClCompile Include="xnacollision.cpp" />
   </ItemGroup>
@@ -126,10 +143,13 @@
     <ClInclude Include="easing.h" />
     <ClInclude Include="EFile.h" />
     <ClInclude Include="GameEngine_Ver3_7.h" />
+    <ClInclude Include="GameRule.h" />
     <ClInclude Include="MyGameMain.h" />
     <ClInclude Include="myLib.h" />
     <ClInclude Include="MyPG.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Task_LC.h" />
+    <ClInclude Include="Title.h" />
     <ClInclude Include="xnacollision.h" />
   </ItemGroup>
   <ItemGroup>
