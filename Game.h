@@ -12,7 +12,7 @@ protected:
 	enum SushiNumber{
 		Syari, Tamako, Samon, Nori, Makuro,Ikura, Kyuuri, Amaebi, Ebi,
 		MakuroSushi, SamonSushi, TamakoSushi, IkuraSushi,
-		KyuuriSushi, TeekaSushi, AmaebiSushi, EbiSushi,Kuuran
+		KyuuriSushi, TeekaSushi, AmaebiSushi, EbiSushi,Kuuran,Neta_Maxnum,	//最大数
 	};
 
 	//寿司の構造体
@@ -51,7 +51,7 @@ protected:
 
 	const static int Maxvalue = 6;			//席、客の数を控える,空席状況＝６
 	int emptySeat = Maxvalue;				//空席状況＝６
-											//int newcustomer = 0;
+
 
 	//席、店設備の設定変数
 	Seat seiki[Maxvalue]{
@@ -76,7 +76,7 @@ protected:
 		ML::Box2D src;
 		SushiNumber sushinumber;
 		int typeNum;				//客タイプ
-		int number;
+		//int number;
 		int kaunto;					//カウント
 		bool hitFlag;
 	};
@@ -87,24 +87,24 @@ protected:
 		int nokori;		//残り個数
 		int money;		//値段
 	};
-	enum {
-		//ネタ
-		SYARI,			//シャリ
-		TAMAKO,			//玉子
-		SAMON,			//サーマン
-		NORI,			//のり
-		MAKURO,			//まくろ
-		IKURA,			//いくら
-		KYUURI,			//きゅうり
-		AMAEBI,			//甘海老
-		EBI,			//海老
-		////計算
-		//SUSHI,
-		//MAKI,
-		//KURIKU,			//クリック
-		NETA_MAXNUM,	//最大数
-	};
-	Keisan neta[NETA_MAXNUM];		//ネタの最大数
+	//enum {
+	//	//ネタ
+	//	SYARI,			//シャリ
+	//	TAMAKO,			//玉子
+	//	SAMON,			//サーマン
+	//	NORI,			//のり
+	//	MAKURO,			//まくろ
+	//	IKURA,			//いくら
+	//	KYUURI,			//きゅうり
+	//	AMAEBI,			//甘海老
+	//	EBI,			//海老
+	//	////計算
+	//	//SUSHI,
+	//	//MAKI,
+	//	//KURIKU,			//クリック
+	//	//NETA_MAXNUM,	//最大数
+	//};
+	Keisan neta[Neta_Maxnum];		//ネタの最大数
 	Keisan keisan;
 
 	//プレイヤーの構造体
@@ -238,7 +238,7 @@ public:
 	void customerlovefood_Render(Chara& lf_, Chara& c_, Chara& fu_);
 	//客の好み寿司チェックプロトタイプ宣言
 	void customerlovefood_Anim(Chara& lf_, Chara& fu_);
-	//寿司まとめチェックのプロトタイプ宣言
+	//寿司まとめアニメーションのプロトタイプ宣言
 	void allsushi_Anim(Sushi& asu_);
 	//寿司まとめの初期化のプロトタイプ宣言
 	void allsushi_Initialize(float x_, float y_);
