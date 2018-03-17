@@ -1063,11 +1063,20 @@ void Game::makisu_Initialize(Sushi& c_, float x_, float y_)
 //Šª‚«‚·s“®(‚¨‚©‚µ‚¢````````````)
 void Game::makisu_UpDate(Sushi& c_, POINT p_, Sushi& md_)
 {
+	string dbgSyari = "ƒVƒƒƒŠF" + to_string(neta[SYARI].nokori) + "\n";
+	OutputDebugString(dbgSyari.c_str());
+
+
 	neta[NETA_MAXNUM].kaisu++;				//ƒNƒŠƒbƒN‰ñ”
 	//”ÍˆÍ“àƒ`ƒFƒbƒN
 	if (p_.x >= 7 && p_.x < 10 && p_.y >= 12 && p_.y <= 15) {
 		for (int i = 12; i <= 14; ++i) {
 			for (int j = 7; j <= 9; ++j) {
+
+				// After
+				neta[md_.arr[i][j]].kaisu += 1;
+
+				/*  Before  
 				switch (md_.arr[i][j]) {
 				case Syari:		neta[SYARI].kaisu++; break;				//ƒVƒƒƒŠ
 				case Tamako:	neta[TAMAKO].kaisu++; break;			//‚½‚Ü‚±
@@ -1079,6 +1088,8 @@ void Game::makisu_UpDate(Sushi& c_, POINT p_, Sushi& md_)
 				case Amaebi:	neta[AMAEBI].kaisu++; break;			//ŠÃŠC˜V
 				case Ebi:		neta[EBI].kaisu++; break;				//ŠC˜V
 				}
+				*/
+
 				md_.arr[i][j] = Kuuran;			//ƒNƒŠƒbƒN‚µ‚½‚çA‹ó—“‚É‚È‚é
 			}
 		}
