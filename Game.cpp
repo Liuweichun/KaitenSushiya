@@ -790,7 +790,7 @@ void Game::customerlovefood_Initialize(Chara& lf_, float x_, float y_, Chara&  c
 	fu_.y = fy_;
 	fu_.active = c_.active;
 	lf_.active = c_.active;
-	lf_.number = 9 + rand() % 8;		//9”Ô‚©‚ç16”Ô‚Ü‚Å‚Íõi‚É‚È‚é
+	lf_.sushinumber = (SushiNumber)(9 + rand() % 8);		//9”Ô‚©‚ç16”Ô‚Ü‚Å‚Íõi‚É‚È‚é
 }
 //----------------------------------------------------------------
 //‹q‚ÌD‚İõi‚Ì•\¦
