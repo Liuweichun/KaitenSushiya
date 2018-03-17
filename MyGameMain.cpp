@@ -1,13 +1,15 @@
 #include "MyGameMain.h"
 
-
-std::map<std::string, Scene*> scenes{
+std::map<std::string, Scene*> scenes
+{
 	{ "Title", new Title() },
-	{ "GameRule", new GameRule() }
+	{ "GameRule", new GameRule() },
+	{ "Game",new Game() },
+	{ "OutsideBusinessHours",new OutsideBusinessHours() },
+	{ "GameClear", new GameClear() },
+	{ "GameOver",new GameOver() }
 };
 Scene* currentScene = scenes["Title"];
-
-
 //-----------------------------------------------------------------------------
 //初期化処理
 //機能概要：プログラム起動時に１回実行される（素材などの準備を行う）

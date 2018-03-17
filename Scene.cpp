@@ -1,6 +1,5 @@
 #include "Scene.h"
 
-
 bool Scene::Initialize() {
 	if (!isDataInitialized) {
 		InitializeResource();

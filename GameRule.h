@@ -1,10 +1,10 @@
 #pragma once
 #include "Scene.h"
 
-
-
-class GameRule : public Scene {
-
+//ゲームルールクラス
+class GameRule : public Scene 
+{
+protected:
 	//ゲーム情報
 	DI::Mouse mouse;
 

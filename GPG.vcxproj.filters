@@ -50,6 +50,15 @@
     <Filter Include="Game\Main\Scene">
       <UniqueIdentifier>{050cfcec-4907-4d9e-b42f-e86acd7763f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Main\Game">
+      <UniqueIdentifier>{f7705080-9216-4dc7-bbf4-9a9d833a09b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Main\Title">
+      <UniqueIdentifier>{02ee2dad-199a-4de7-93ca-aa632ec13012}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Main\Easing">
+      <UniqueIdentifier>{0205459d-db79-47d3-979a-211c3454d5eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="myLib.cpp">
@@ -118,9 +127,6 @@
     <ClCompile Include="GameEngine_Ver3_7.cpp">
       <Filter>Game\Main\GE</Filter>
     </ClCompile>
-    <ClCompile Include="easing.cpp">
-      <Filter>Game\Main</Filter>
-    </ClCompile>
     <ClCompile Include="Task_Gameover.cpp">
       <Filter>Game\Main</Filter>
     </ClCompile>
@@ -133,14 +139,29 @@
     <ClCompile Include="Task_Gameclear.cpp">
       <Filter>Game\Main</Filter>
     </ClCompile>
-    <ClCompile Include="Title.cpp">
-      <Filter>Game\Main\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Game\Main\Scene</Filter>
     </ClCompile>
     <ClCompile Include="GameRule.cpp">
-      <Filter>Game\Main\Scene</Filter>
+      <Filter>Game\Main\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>Game\Main\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="GameClear.cpp">
+      <Filter>Game\Main\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Game\Main\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOver.cpp">
+      <Filter>Game\Main\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="OutsideBusinessHours.cpp">
+      <Filter>Game\Main\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="easing.cpp">
+      <Filter>Game\Main\Easing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -201,17 +222,29 @@
     <ClInclude Include="GameEngine_Ver3_7.h">
       <Filter>Game\Main\GE</Filter>
     </ClInclude>
-    <ClInclude Include="easing.h">
-      <Filter>Game\Main</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Game\Main\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Title.h">
-      <Filter>Game\Main\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="GameRule.h">
-      <Filter>Game\Main\Scene</Filter>
+      <Filter>Game\Main\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>Game\Main\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClear.h">
+      <Filter>Game\Main\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Game\Main\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOver.h">
+      <Filter>Game\Main\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="OutsideBusinessHours.h">
+      <Filter>Game\Main\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="easing.h">
+      <Filter>Game\Main\Easing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

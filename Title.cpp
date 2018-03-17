@@ -1,30 +1,41 @@
 #include "Title.h"
 #include "MyGameMain.h"
 
-
-void Title::InitializeResource() {
+//-----------------------------------------------------------------------------
+//リソース処理
+//-----------------------------------------------------------------------------
+void Title::InitializeResource() 
+{
 	DG::Image_Create("TitleImg", "./data/image/Title.png");
 	DG::Image_Create("Title_haikeiImg", "./data/image/Title_haikei.png");
 	DG::Image_Create("shisyouImg", "./data/image/shisyou.png");						//師匠
 	DG::Image_Create("kaishibotanImg", "./data/image/kaishibotan.png");				//ゲーム開始ボタン
 }
-
-bool Title::Initialize() {
-
-	if (!Scene::Initialize())
+//-----------------------------------------------------------------------------
+//初期化処理
+//機能概要：プログラム起動時に１回実行される（素材などの準備を行う）
+//-----------------------------------------------------------------------------
+bool Title::Initialize()
+{
+	if (!Scene::Initialize()) {
 		return false;
-																				//タイトルの初期化
+	}
+
+	//タイトルの初期化
 	title_Initialize(title);
 	//師匠の初期化
 	shisyou_Initialize(shisyou, 0, 8);
 	//ゲーム開始ボタンの初期化
 	playbutton_Initialize(playbutton, 10, 10);
 
-
 	return true;
 }
-
-void Title::Update() {
+//-----------------------------------------------------------------------------
+//更新処理
+//機能概要：ゲームの１フレームに当たる処理
+//-----------------------------------------------------------------------------
+void Title::Update()
+{
 	//マウスカーソルの位置を得る
 	mouse = DI::Mouse_GetState();
 	POINT pos;
@@ -44,8 +55,12 @@ void Title::Update() {
 		currentScene->Initialize();
 	}
 }
-
-void Title::Render() {
+//-----------------------------------------------------------------------------
+//描画処理
+//機能概要：ゲームの１フレームに当たる表示処理
+//-----------------------------------------------------------------------------
+void Title::Render() 
+{
 	//背景の表示
 	haikei_Render(haikei);
 
@@ -58,15 +73,20 @@ void Title::Render() {
 	//ゲーム開始ボタンの表示
 	playbutton_Render(playbutton);
 }
-
-void Title::Finalize() {
+//-----------------------------------------------------------------------------
+//解放処理
+//機能概要：プログラム終了時に１回実行される（素材などの解放を行う）
+//-----------------------------------------------------------------------------
+void Title::Finalize()
+{
 	DG::Image_Erase("TitleImg");
 	DG::Image_Erase("Title_haikeiImg");
 	DG::Image_Erase("shisyouImg");
 	DG::Image_Erase("kaishibotanImg");
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------------------
+//関数
+//--------------------------------------------------------------------------------------------------------------------------------
 void Title::title_Initialize(Alldata& a_)
 {
 	//タイトルイージンの初期化(個有名、移動の種類、開始値、終了値、移動する時間)

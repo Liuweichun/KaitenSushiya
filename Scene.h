@@ -1,8 +1,7 @@
 #pragma once
 #include "MyPG.h"
 
-
-
+//
 class Scene {
 
 	bool isDataInitialized = false;

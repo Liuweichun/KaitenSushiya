@@ -98,11 +98,15 @@
     <ClCompile Include="DG2014\DG2014_VertexContainer.cpp" />
     <ClCompile Include="DI2014_Ver3_4.cpp" />
     <ClCompile Include="easing.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameClear.cpp" />
     <ClCompile Include="GameEngine_Ver3_7.cpp" />
+    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="GameRule.cpp" />
     <ClCompile Include="MyGameMain.cpp" />
     <ClCompile Include="myLib.cpp" />
     <ClCompile Include="MyPG.cpp" />
+    <ClCompile Include="OutsideBusinessHours.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Task_Game.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -142,11 +146,15 @@
     <ClInclude Include="DI2014_Ver3_4.h" />
     <ClInclude Include="easing.h" />
     <ClInclude Include="EFile.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameClear.h" />
     <ClInclude Include="GameEngine_Ver3_7.h" />
+    <ClInclude Include="GameOver.h" />
     <ClInclude Include="GameRule.h" />
     <ClInclude Include="MyGameMain.h" />
     <ClInclude Include="myLib.h" />
     <ClInclude Include="MyPG.h" />
+    <ClInclude Include="OutsideBusinessHours.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Task_LC.h" />
     <ClInclude Include="Title.h" />

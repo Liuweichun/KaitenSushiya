@@ -2,10 +2,9 @@
 #include "Scene.h"
 #include "easing.h"
 
-
-
-class Title : public Scene {
-
+//タイトルクラス
+class Title : public Scene{
+protected:
 	//ゲーム情報
 	DI::Mouse mouse;
 
@@ -35,7 +34,9 @@ public:
 	virtual void Update();
 	virtual void Render();
 	virtual void Finalize();
-
+	//-----------------------------------------------------------------------------
+	//クラスのメンバ関数
+	//-----------------------------------------------------------------------------
 	//タイトルの初期化のプロトタイプ宣言
 	void title_Initialize(Alldata& a_);
 	//タイトルのカウントのプロトタイプ宣言
