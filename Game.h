@@ -19,6 +19,8 @@ protected:
 	struct Sushi {
 		float x;
 		float y;
+		float befX;
+		float befY;
 		int arr[17][30];
 		ML::Box2D chip[24];
 		int animCnt;				//寿司アニメーション
@@ -241,7 +243,7 @@ public:
 	//寿司まとめアニメーションのプロトタイプ宣言
 	void allsushi_Anim(Sushi& asu_);
 	//寿司まとめの初期化のプロトタイプ宣言
-	void allsushi_Initialize(float x_, float y_);
+	void allsushi_Initialize(float x_, float y_, int saraidx_);
 	//寿司まとめの表示のプロトタイプ宣言
 	void allsushi_Render(Sushi& asu_);
 	//寿司まとめの行動のプロトタイプ宣言

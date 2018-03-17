@@ -1,6 +1,7 @@
 #include "MyGameMain.h"
 #include "Game.h"
 #include <time.h>
+#include <map>
 #include "easing.h"
 
 //-----------------------------------------------------------------------------
@@ -827,23 +828,18 @@ void Game::customerlovefood_Anim(Chara& lf_, Chara& fu_)
 }
 //----------------------------------------------------------------
 //寿司のまとめ初期化
-void Game::allsushi_Initialize(float x_, float y_)
+void Game::allsushi_Initialize(float x_, float y_, int saraidx_)
 {
-	for (int i = 0; i < Maxvalue; ++i) {
-		if (allsushi[i].active == false) {
-			//寿司を生成する
-			allsushi[i].active = true;
-			allsushi[i].x = x_;
-			allsushi[i].y = y_;
-			allsushi[i].motion = Normal;
-			allsushi[i].moveCnt = 0;
-			allsushi[i].hitBase = ML::Box2D(0, -12, 32, 32);
-			allsushi[i].animCnt = 0;
-			allsushi[i].Cnt = 0;
-			allsushi[i].hitFlag = false;
-			break;						//寿司がループを抜ける
-		}
-	}
+	//寿司を生成する
+	allsushi[saraidx_].active = true;
+	allsushi[saraidx_].x = x_;
+	allsushi[saraidx_].y = y_;
+	allsushi[saraidx_].motion = Normal;
+	allsushi[saraidx_].moveCnt = 0;
+	allsushi[saraidx_].hitBase = ML::Box2D(0, -12, 32, 32);
+	allsushi[saraidx_].animCnt = 0;
+	allsushi[saraidx_].Cnt = 0;
+	allsushi[saraidx_].hitFlag = false;
 }
 //----------------------------------------------------------------
 //寿司まとめの表示
@@ -1073,7 +1069,6 @@ void Game::makisu_UpDate(Sushi& c_, POINT p_, Sushi& md_)
 			for (int j = 7; j <= 9; ++j) {
 				// After
 				neta[md_.arr[i][j]].kaisu += 1;
-	/*			neta[md_.arr[i][j]].nokori -= 1;*/
 
 				/*  Before
 				switch (md_.arr[i][j]) {
@@ -1094,69 +1089,106 @@ void Game::makisu_UpDate(Sushi& c_, POINT p_, Sushi& md_)
 			}
 		}
 
-		//寿司の合成処理
-		//シャリ=2、まくろ=2なら、マクロ寿司（9番）
-		if (neta[Syari].nokori > 0 || neta[Makuro].nokori > 0) {
-			if (neta[Syari].kaisu == 2 && neta[Makuro].kaisu == 2) {
-				shisyou.active = false;
-				allsushi[CheckDisabledSushi()].sushinumber=MakuroSushi;
-				//neta[Syari].kaisu = 0, neta[Makuro].kaisu = 0;
+		std::function<int(std::map<int, int>, int)> checkSushi= 
+			[&](std::map<int, int> _j, int _r) -> int {
+
+			// 素材が残ってるのかチェック
+			for (auto& jyouken : _j)
+				if (neta[jyouken.first].nokori <= 0)
+					return -1;
+
+			// クリックした回数が合ってるかチェック
+			for (auto& jyouken : _j)
+				if (neta[jyouken.first].kaisu != jyouken.second)
+					return -1;
+
+			// 寿司を作る準備をする。
+			shisyou.active = false;
+			int ret = CheckDisabledSushi();
+			allsushi[ret].sushinumber = (SushiNumber)_r;
+
+			return ret;
+		};
+
+
+		struct SushiRecepie {
+			std::map<int, int> recepie;
+			int kekka;
+		};
+		static SushiRecepie recepies[] {
+			{
+				{
+					{ Syari, 2 },
+					{ Samon, 2 }
+				}, SamonSushi
+			},
+			{
+				{
+					{ Syari, 2 },
+					{ Makuro, 2 }
+				}, MakuroSushi
+			},
+			{
+				{
+					{ Syari, 2 },
+					{ Tamako, 2 }
+				}, TamakoSushi
+			},
+			{
+				{
+					{ Syari, 2 },
+					{ Ikura, 2 },
+					{ Nori, 1 },
+					{ Kyuuri, 1 }
+				}, IkuraSushi
+			},
+			{
+				{
+					{ Syari, 4 },
+					{ Nori, 1 },
+					{ Kyuuri, 1 }
+				}, KyuuriSushi
+			},
+			{
+				{
+					{ Syari, 4 },
+					{ Nori, 1 },
+					{ Kyuuri, 1 }
+				}, KyuuriSushi
+			},
+			{
+				{
+					{ Syari, 4 },
+					{ Nori, 1 },
+					{ Makuro, 1 }
+				}, TeekaSushi
+			},
+			{
+				{
+					{ Syari, 1 },
+					{ Amaebi, 1 }				
+				}, AmaebiSushi
+			},
+			{
+				{
+					{ Syari, 2 },
+					{ Ebi, 2 }
+				}, EbiSushi
+			},
+		};
+
+		int nextSara = -1;
+		for (auto& r : recepies) {
+			nextSara = checkSushi(r.recepie, r.kekka);
+			if (nextSara >= 0) {
+				allsushi_Initialize(14, 10, nextSara);
+				break;
 			}
 		}
 
-		//シャリ=2、サーモン=2、サーモン/寿司（10番）
-		if (neta[Syari].nokori > 0&&neta[Samon].nokori > 0) {
-			if (neta[Syari].kaisu == 2 && neta[Samon].kaisu == 2) {
-				shisyou.active = false;
-				allsushi[CheckDisabledSushi()].sushinumber =SamonSushi;
-	/*			neta[Syari].kaisu = 0, neta[Samon].kaisu = 0;*/
-			}
-		}
-
-		//シャリ=2、たまこ=2、玉子寿司（11番）
-		if (neta[Syari].nokori > 0&&neta[Tamako].nokori > 0) {
-			if (neta[Syari].kaisu == 2 && neta[Tamako].kaisu == 2) {
-				shisyou.active = false;
-				allsushi[CheckDisabledSushi()].sushinumber=TamakoSushi;
-	/*			neta[Syari].kaisu = 0, neta[Tamako].kaisu = 0;*/
-			}
-		}
-
-		//シャリ=2、いくら=2、のり=1なら、いくら寿司（12番）
-		if (neta[Syari].nokori > 0 || neta[Ikura].nokori > 0 && neta[Nori].nokori > 0 && neta[Kyuuri].kaisu > 0) {
-			if (neta[Syari].kaisu == 2 && neta[Ikura].kaisu == 2 && neta[Nori].kaisu == 1 && neta[Kyuuri].kaisu == 1) {
-				shisyou.active = false;
-				allsushi[CheckDisabledSushi()].sushinumber=IkuraSushi;
-			}
-		}
-
-		//シャリ=4、のり=1、胡瓜=1なら、きゅうり寿司（13番）
-		if (neta[Syari].kaisu == 4 && neta[Nori].kaisu == 1 && neta[Kyuuri].kaisu == 1) {
-			shisyou.active = false;
-			allsushi[CheckDisabledSushi()].sushinumber=KyuuriSushi;
-		}
-		//シャリ=4、のり=1、マクロ=1なら、鉄火寿司（14番）
-		if (neta[Syari].kaisu == 4 && neta[Nori].kaisu == 1 && neta[Makuro].kaisu == 1) {
-			shisyou.active = false;
-			allsushi[CheckDisabledSushi()].sushinumber=TeekaSushi;
-		}
-		//シャリ=1、甘海老=1なら、甘海老寿司（15番）
-		if (neta[Syari].kaisu == 1 && neta[Amaebi].kaisu == 1) {
-			shisyou.active = false;
-			allsushi[CheckDisabledSushi()].sushinumber=AmaebiSushi;
-		}
-		//シャリ=2、海老=2なら、海老寿司（16番）
-		if (neta[Syari].kaisu == 2 && neta[Ebi].kaisu == 2) {
-			shisyou.active = false;
-			allsushi[CheckDisabledSushi()].sushinumber=EbiSushi;
-		}
-
-		//寿司を出す
-		allsushi_Initialize(14, 10);
 		//寿司を作ったら、各ネーター計算0になる
-		neta[Syari].kaisu = 0, neta[Samon].kaisu = 0, neta[Tamako].kaisu = 0;
-		neta[Makuro].kaisu = 0, neta[Ikura].kaisu = 0, neta[Nori].kaisu = 0;
-		neta[Kyuuri].kaisu = 0, neta[Amaebi].kaisu = 0, neta[Ebi].kaisu = 0;
+		for (int i = 0; i < 9; ++i)
+			neta[i].kaisu = 0;
 
 		//クリック回数も0に戻す
 		neta[Neta_Maxnum].kaisu = 0;
@@ -1471,32 +1503,30 @@ int Game::CheckDisabledSushi()
 //寿司廃棄処理(未)
 void Game::allsushi_dispose(Sushi& asu_, POINT p_)
 {
-	//if (asu_.active == true) {
-	//	ML::Box2D me = asu_.hitBase.OffsetCopy(float(asu_.x)* 32.0f, float(asu_.y)* 32.0f);
-	//	//if (mouse.LB.on) {
-	//		if (asu_.motion == Dead) {
-	//			me.x = asu_.x;
-	//			me.y = asu_.y;
-	//			//POINT now = { asu_.x,asu_.y };		//移動後
-	//			if (me.x <= p_.x &&p_.x < me.x + me.w&&me.y <= p_.y && p_.y < me.y + me.h) {
-	//				if (mouse.LB.on) {
-	//					asu_.hitFlag = true;
-	//				}
-	//			}
-	//			//if (asu_.hitFlag == true) {
-	//			//	//asu_.x = 0;
-	//			//	//asu_.y = 0;
-	//			//	asu_.x = float(p_.x);
-	//			//	asu_.y = float(p_.y);
-	//			//}
-	//			//どうやって寿司を元の位置に戻らせるの？？？？
-	//			//else
-	//			//{
-	//			//	asu_.hitFlag = false;
-	//			//}
-	//		}
-	//	//}
-	//}
+	if (asu_.active == true) {
+		ML::Box2D me = asu_.hitBase.OffsetCopy(float(asu_.x)* 32.0f, float(asu_.y)* 32.0f);
+		//if (mouse.LB.on) {
+			if (asu_.motion == Dead) {
+				me.x = asu_.x;
+				me.y = asu_.y;
+				//POINT now = { asu_.x,asu_.y };		//移動後
+				if (me.x <= p_.x &&p_.x < me.x + me.w&&me.y <= p_.y && p_.y < me.y + me.h) {
+					if (mouse.LB.down) {
+						asu_.befX = asu_.x;
+						asu_.befY = asu_.y;
+					}
+					if (mouse.LB.on){
+						asu_.x = float(p_.x);
+						asu_.y = float(p_.y);
+					}
+					if (mouse.LB.up) {
+						asu_.x = asu_.befX;
+						asu_.y = asu_.befY;
+					}
+				}
+			}
+		//}
+	}
 }
 //----------------------------------------------------------------
 //メニューの初期化
