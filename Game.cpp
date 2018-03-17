@@ -1062,7 +1062,9 @@ void Game::makisu_UpDate(Sushi& c_, POINT p_, Sushi& md_)
 	//デバグ用
 	string dbgSyari = "シャリ：" + to_string(neta[Syari].nokori) + "\n";
 	OutputDebugString(dbgSyari.c_str());
-
+	//可笑しいバグ出る
+	//音楽のやり方
+	//寿司廃棄処理
 
 	neta[Neta_Maxnum].kaisu++;				//クリック回数
 	//範囲内チェック
