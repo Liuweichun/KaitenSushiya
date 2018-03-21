@@ -1051,6 +1051,24 @@ void Game::makisu_Initialize(Sushi& c_, float x_, float y_)
 	c_.y = y_;
 	c_.Cnt = 0;
 }
+int Game::CheckSushi(SushiRecepie recepie) {
+	// ‘fŞ‚ªc‚Á‚Ä‚é‚Ì‚©ƒ`ƒFƒbƒN
+	for (auto& jyouken : recepie.recepie)
+		if (neta[jyouken.first].nokori <= 0)
+			return -1;
+
+	// ƒNƒŠƒbƒN‚µ‚½‰ñ”‚ª‡‚Á‚Ä‚é‚©ƒ`ƒFƒbƒN
+	for (auto& jyouken : recepie.recepie)
+		if (neta[jyouken.first].kaisu != jyouken.second)
+			return -1;
+
+	// õi‚ğì‚é€”õ‚ğ‚·‚éB
+	shisyou.active = false;
+	int ret = CheckDisabledSushi();
+	allsushi[ret].sushinumber = (SushiNumber)recepie.kekka;
+
+	return ret;
+}
 //----------------------------------------------------------------
 //Šª‚«‚·s“®(‚¨‚©‚µ‚¢````````````)
 void Game::makisu_UpDate(Sushi& c_, POINT p_, Sushi& md_)
@@ -1089,32 +1107,7 @@ void Game::makisu_UpDate(Sushi& c_, POINT p_, Sushi& md_)
 			}
 		}
 
-		std::function<int(std::map<int, int>, int)> checkSushi= 
-			[&](std::map<int, int> _j, int _r) -> int {
-
-			// ‘fŞ‚ªc‚Á‚Ä‚é‚Ì‚©ƒ`ƒFƒbƒN
-			for (auto& jyouken : _j)
-				if (neta[jyouken.first].nokori <= 0)
-					return -1;
-
-			// ƒNƒŠƒbƒN‚µ‚½‰ñ”‚ª‡‚Á‚Ä‚é‚©ƒ`ƒFƒbƒN
-			for (auto& jyouken : _j)
-				if (neta[jyouken.first].kaisu != jyouken.second)
-					return -1;
-
-			// õi‚ğì‚é€”õ‚ğ‚·‚éB
-			shisyou.active = false;
-			int ret = CheckDisabledSushi();
-			allsushi[ret].sushinumber = (SushiNumber)_r;
-
-			return ret;
-		};
-
-
-		struct SushiRecepie {
-			std::map<int, int> recepie;
-			int kekka;
-		};
+		// õi‚Ìì‚è•û‚Ì³‹`
 		static SushiRecepie recepies[] {
 			{
 				{
@@ -1177,9 +1170,10 @@ void Game::makisu_UpDate(Sushi& c_, POINT p_, Sushi& md_)
 			},
 		};
 
+		// ‘g‚İ‡‚í‚¹‚ğ”äŠr‚µ‚È‚ª‚çì‚ê‚éõi‚ğ’T‚µ‚Ä‹ó‚¢‚Ä‚éõiM‚É“K‰‚³‚¹‚é
 		int nextSara = -1;
 		for (auto& r : recepies) {
-			nextSara = checkSushi(r.recepie, r.kekka);
+			nextSara = CheckSushi(r);
 			if (nextSara >= 0) {
 				allsushi_Initialize(14, 10, nextSara);
 				break;
