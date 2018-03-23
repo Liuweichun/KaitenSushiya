@@ -1048,6 +1048,24 @@ void Game::makisu_Initialize(Sushi& c_, float x_, float y_)
 	c_.y = y_;
 	c_.Cnt = 0;
 }
+int Game::CheckSushi(SushiRecepie recepie) {
+	// 素材が残ってるのかチェック
+	for (auto& jyouken : recepie.recepie)
+		if (neta[jyouken.first].nokori <= 0)
+			return -1;
+
+	// クリックした回数が合ってるかチェック
+	for (auto& jyouken : recepie.recepie)
+		if (neta[jyouken.first].kaisu != jyouken.second)
+			return -1;
+
+	// 寿司を作る準備をする。
+	shisyou.active = false;
+	int ret = CheckDisabledSushi();
+	allsushi[ret].sushinumber = (SushiNumber)recepie.kekka;
+
+	return ret;
+}
 //----------------------------------------------------------------
 int Game::CheckSushi(SushiRecepie recepie) {
 	// 素材が残ってるのかチェック
@@ -1088,8 +1106,13 @@ void Game::makisu_UpDate(Sushi& c_, POINT p_, Sushi& md_)
 			}
 		}
 
+<<<<<<< HEAD
 		// 寿司の作り方の処理
 		static SushiRecepie recepies[]{
+=======
+		// 寿司の作り方の正義
+		static SushiRecepie recepies[] {
+>>>>>>> origin/feature/to_class
 			{
 				{
 					{ Syari, 2 },
@@ -1155,8 +1178,12 @@ void Game::makisu_UpDate(Sushi& c_, POINT p_, Sushi& md_)
 		int nextSara = -1;
 		for (auto& r : recepies) {
 			nextSara = CheckSushi(r);
+<<<<<<< HEAD
 			if (nextSara >=0) {
 				//寿司を出す
+=======
+			if (nextSara >= 0) {
+>>>>>>> origin/feature/to_class
 				allsushi_Initialize(14, 10, nextSara);
 				break;
 			}
