@@ -9,10 +9,14 @@ protected:
 	DI::Mouse mouse;
 	DI::VGamePad  in1;
 	enum Motion { Non, Normal, Dead, Happy, Angry };
-	enum SushiNumber{
-		Syari, Tamako, Samon, Nori, Makuro,Ikura, Kyuuri, Amaebi, Ebi,
-		MakuroSushi, SamonSushi, TamakoSushi, IkuraSushi,
-		KyuuriSushi, TeekaSushi, AmaebiSushi, EbiSushi,Kuuran,Neta_Maxnum,	//最大数
+	enum SushiNumber {
+		Syari, Tamako, Samon, Nori, Makuro, Ikura, Kyuuri, Amaebi, Ebi,
+		MakuroSushi, SamonSushi, TamakoSushi, IkuraSushi,KyuuriSushi,
+		TeekaSushi, AmaebiSushi, EbiSushi, Kuuran, Neta_Maxnum,
+	};
+	struct SushiRecepie {
+		std::map<int, int> recepie;
+		int kekka;
 	};
 
 	//寿司の構造体
@@ -31,7 +35,6 @@ protected:
 		SushiNumber sushinumber;
 		ML::Box2D drawBase;
 		ML::Box2D src;
-		//int number;					//番号
 		int moveCnt;
 		int Cnt;
 	};
@@ -78,7 +81,6 @@ protected:
 		ML::Box2D src;
 		SushiNumber sushinumber;
 		int typeNum;				//客タイプ
-		//int number;
 		int kaunto;					//カウント
 		bool hitFlag;
 	};
@@ -276,6 +278,7 @@ public:
 	void makisu_UpDate(Sushi& c_, POINT p_, Sushi& md_);
 	//ネタ単位の移動チェックプロトタイプ宣言
 	void Sushi_Check(Sushi& su_, POINT p_, Keisan& ku_);
+	int CheckSushi(SushiRecepie recepie);
 	//寿司情報を読み込むプロトタイプ宣言
 	bool Sushi_Load(Sushi& su_, int n_);
 	//寿司の表示プロトタイプ宣言

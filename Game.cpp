@@ -11,6 +11,7 @@ void Game::InitializeResource()
 {
 	DG::Image_Create("sushisozaiImg", "./data/image/sushisozai01.png");				//寿司、ネター
 	DG::Image_Create("De_sushisozaiImg", "./data/image/De_sushisozai.png");			//腐った寿司
+	DG::Image_Create("shippai_sushiImg", "./data/image/shippai_sushi.png");
 	DG::Image_Create("haikeiImg", "./data/image/haikei.png");						//背景
 	DG::Image_Create("menuImg", "./data/image/menu.png");							//メニュー
 	DG::Image_Create("menu_setsumeiImg", "./data/image/menu_setsumei.png");			//メニュー説明
@@ -113,7 +114,7 @@ void Game::Update()
 			if (pos.x >= 2 && pos.x <= 4 && pos.y >= 12 && pos.y <= 14) {
 				//マップチェック
 				Sushi_Check(sushi, pos, neta[Neta_Maxnum]);	//(kuriku)
-				//neta[NETA_MAXNUM].kaisu++;				//クリック回数
+				neta[Neta_Maxnum].kaisu++;				//クリック回数
 			}
 			//巻きす行動
 			makisu_UpDate(makisu, pos, sushi);
@@ -234,7 +235,7 @@ void Game::Finalize()
 	DG::Image_Erase("makisuImg");
 	DG::Image_Erase("kaitenrenImg");
 	DG::Image_Erase("customerImg");
-	DG::Image_Erase("customerImg");
+	DG::Image_Erase("shippai_sushiImg");
 	DG::Font_Erase("FontA");
 	DG::Font_Erase("FontB");
 }
@@ -522,17 +523,18 @@ void Game::customerA_UpDate(Chara&  c_, Seat & set_, Chara& lf_, Sushi& asu_, Ch
 {
 	//客カウント
 	c_.kaunto++;
-	if (c_.kaunto == 200) {
+	if (c_.kaunto == 400) {
 		c_.active = true;
+		PlaySound("./data/SE/wellcome.wav", NULL, SND_FILENAME | SND_ASYNC);		//SEを再生
 		if (c_.active == false) {
 			c_.kaunto = 0;
 			c_.kaunto++;
 		}
 	}
-	if (c_.kaunto>1000) {
+	if (c_.kaunto>1200) {
 		c_.motion = Angry;
 	}
-	if (c_.kaunto > 2500) {
+	if (c_.kaunto > 2700) {
 		//プレイヤーの人気が－１
 		player.ninki--;
 		if (set_.isEmpty == true) {
@@ -546,17 +548,18 @@ void Game::customerA_UpDate(Chara&  c_, Seat & set_, Chara& lf_, Sushi& asu_, Ch
 //客Bの動作
 void Game::customerB_UpDate(Chara&  c_, Seat & set_, Chara& lf_, Sushi& asu_, Chara& fu_)
 {
-	if (c_.kaunto == 300) {
+	if (c_.kaunto == 500) {
 		c_.active = true;
+		PlaySound("./data/SE/wellcome.wav", NULL, SND_FILENAME | SND_ASYNC);		//SEを再生
 		if (c_.active == false) {
 			c_.kaunto = 0;
 			c_.kaunto++;
 		}
 	}
-	if (c_.kaunto>1100) {
+	if (c_.kaunto>1300) {
 		c_.motion = Angry;
 	}
-	if (c_.kaunto > 2600) {
+	if (c_.kaunto > 2800) {
 		//プレイヤーの人気が－１
 		player.ninki--;
 		if (set_.isEmpty == true) {
@@ -574,13 +577,14 @@ void Game::customerC_UpDate(Chara&  c_, Seat & set_, Chara& lf_, Sushi& asu_, Ch
 {
 	//客カウント
 	c_.kaunto++;
-	if (c_.kaunto == 400) {
+	if (c_.kaunto == 600) {
 		c_.active = true;
+		PlaySound("./data/SE/wellcome.wav", NULL, SND_FILENAME | SND_ASYNC);		//SEを再生
 	}
-	if (c_.kaunto > 1200) {
+	if (c_.kaunto > 1400) {
 		c_.motion = Angry;
 	}
-	if (c_.kaunto > 2700) {
+	if (c_.kaunto > 2900) {
 		//プレイヤーの人気が－１
 		player.ninki--;
 		if (set_.isEmpty == true) {
@@ -596,14 +600,15 @@ void Game::customerD_UpDate(Chara&  c_, Seat & set_, Chara& lf_, Sushi& asu_, Ch
 {
 	//客カウント
 	c_.kaunto++;
-	if (c_.kaunto == 100) {
+	if (c_.kaunto == 200) {
 		c_.active = true;
+		PlaySound("./data/SE/wellcome.wav", NULL, SND_FILENAME | SND_ASYNC);		//SEを再生
 	}
 	//客が待つ時間は遅過ぎると怒る
-	if (c_.kaunto>900) {
+	if (c_.kaunto>1000) {
 		c_.motion = Angry;
 	}
-	if (c_.kaunto > 2400) {
+	if (c_.kaunto > 2500) {
 		//プレイヤーの人気が－１
 		player.ninki--;
 		if (set_.isEmpty == true) {
@@ -987,7 +992,7 @@ void Game::allsushi_UpDate(Sushi& asu_, POINT p_)
 		//寿司は客と当たり判定をさせる
 		for (int c = 0; c < Maxvalue; ++c) {
 			if (customer[c].active == true) {											//客はいる場合
-				//寿司自身の当たり判定の写真を用意（現在位置）
+				//寿司自身の当たり判定を用意（現在位置）
 				ML::Box2D you = customer[c].hitBase.OffsetCopy(customer[c].x * 32, customer[c].y * 32);
 				//接触判定
 				if (true == you.Hit(me) && lovefood[c].sushinumber == asu_.sushinumber) {			//自分と接触してるか相手に判断してもらう
@@ -1001,8 +1006,8 @@ void Game::allsushi_UpDate(Sushi& asu_, POINT p_)
 								//客の入店、お帰り処理
 								customer_Respawn(customer[c], asu_, lovefood[c], seiki[c], fukidashi[c]);
 								asu_.active = false;		//寿司が消える
-								player.shikin +=50;
-								player.ninki++;			//人気+1
+								player.shikin += neta[Syari].money;		//資金+50
+								player.ninki++;							//人気+1
 								asu_.Cnt = 0;
 							}
 						}
@@ -1016,21 +1021,13 @@ void Game::allsushi_UpDate(Sushi& asu_, POINT p_)
 								//客の入店、お帰り処理
 								customer_Respawn(customer[c], asu_, lovefood[c], seiki[c], fukidashi[c]);
 								asu_.active = false;		//寿司が消える
-								player.shikin -=100;
-								player.ninki -= 5;
+								player.shikin -= neta[Tamako].money;	//資金-100		
+								player.ninki -= 5;						//人気-5
 								asu_.Cnt = 0;
 							}
 						}
 						break;
 					}
-
-					////客が遅く待たせればお金が半分になる
-					//if (customer[c].motion == Angry) {
-					//	//客の入店、お帰り処理
-					//	customer_Respawn(customer[c], asu_, lovefood[c], seiki[c]);
-					//	player.shikin += (neta[SUSHI].money/2);
-					//}
-
 					seiki[c].isEmpty = true;
 					break;
 				}
@@ -1052,6 +1049,25 @@ void Game::makisu_Initialize(Sushi& c_, float x_, float y_)
 	c_.Cnt = 0;
 }
 //----------------------------------------------------------------
+int Game::CheckSushi(SushiRecepie recepie) {
+	// 素材が残ってるのかチェック
+	for (auto& jyouken : recepie.recepie)
+		if (neta[jyouken.first].nokori < 0)		//		if (neta[jyouken.first].nokori <= 0)
+			return -1;
+
+	// クリックした回数が合ってるかチェック
+	for (auto& jyouken : recepie.recepie)
+		if (neta[jyouken.first].kaisu != jyouken.second)
+			return -1;
+
+	// 寿司を作る準備をする。
+	shisyou.active = false;
+	int ret = CheckDisabledSushi();
+	allsushi[ret].sushinumber = (SushiNumber)recepie.kekka;
+
+	return ret;
+}
+//----------------------------------------------------------------
 //巻きす行動(おかしい～～～～～～～～～～～～)
 void Game::makisu_UpDate(Sushi& c_, POINT p_, Sushi& md_)
 {
@@ -1062,60 +1078,18 @@ void Game::makisu_UpDate(Sushi& c_, POINT p_, Sushi& md_)
 	//音楽のやり方
 	//寿司廃棄処理
 
-	neta[Neta_Maxnum].kaisu++;				//クリック回数
+	//neta[Neta_Maxnum].kaisu++;				//クリック回数
 	//範囲内チェック
 	if (p_.x >= 7 && p_.x < 10 && p_.y >= 12 && p_.y <= 15) {
 		for (int i = 12; i <= 14; ++i) {
 			for (int j = 7; j <= 9; ++j) {
-				// After
 				neta[md_.arr[i][j]].kaisu += 1;
-
-				/*  Before
-				switch (md_.arr[i][j]) {
-				case Syari:		neta[SYARI].kaisu++; break;				//シャリ
-				case Tamako:	neta[TAMAKO].kaisu++; break;			//たまこ
-				case Samon:		neta[SAMON].kaisu++; break;				//サーモン
-				case Nori:		neta[NORI].kaisu++; break;				//のり
-				case Makuro:	neta[MAKURO].kaisu++; break;			//まくろ
-				case Ikura:		neta[IKURA].kaisu++; break;				//いくら
-				case Kyuuri:	neta[KYUURI].kaisu++; break;			//きゅうり
-				case Amaebi:	neta[AMAEBI].kaisu++; break;			//甘海老
-				case Ebi:		neta[EBI].kaisu++; break;				//海老
-				}
-				*/
-
 				md_.arr[i][j] = Kuuran;			//クリックしたら、空欄になる
-
 			}
 		}
 
-		std::function<int(std::map<int, int>, int)> checkSushi= 
-			[&](std::map<int, int> _j, int _r) -> int {
-
-			// 素材が残ってるのかチェック
-			for (auto& jyouken : _j)
-				if (neta[jyouken.first].nokori <= 0)
-					return -1;
-
-			// クリックした回数が合ってるかチェック
-			for (auto& jyouken : _j)
-				if (neta[jyouken.first].kaisu != jyouken.second)
-					return -1;
-
-			// 寿司を作る準備をする。
-			shisyou.active = false;
-			int ret = CheckDisabledSushi();
-			allsushi[ret].sushinumber = (SushiNumber)_r;
-
-			return ret;
-		};
-
-
-		struct SushiRecepie {
-			std::map<int, int> recepie;
-			int kekka;
-		};
-		static SushiRecepie recepies[] {
+		// 寿司の作り方の処理
+		static SushiRecepie recepies[]{
 			{
 				{
 					{ Syari, 2 },
@@ -1125,62 +1099,64 @@ void Game::makisu_UpDate(Sushi& c_, POINT p_, Sushi& md_)
 			{
 				{
 					{ Syari, 2 },
-					{ Makuro, 2 }
+		{ Makuro, 2 }
 				}, MakuroSushi
 			},
 			{
 				{
 					{ Syari, 2 },
-					{ Tamako, 2 }
+		{ Tamako, 2 }
 				}, TamakoSushi
 			},
 			{
 				{
 					{ Syari, 2 },
-					{ Ikura, 2 },
-					{ Nori, 1 },
-					{ Kyuuri, 1 }
+		{ Ikura, 2 },
+		{ Nori, 1 },
+		{ Kyuuri, 1 }
 				}, IkuraSushi
 			},
 			{
 				{
 					{ Syari, 4 },
-					{ Nori, 1 },
-					{ Kyuuri, 1 }
+		{ Nori, 1 },
+		{ Kyuuri, 1 }
 				}, KyuuriSushi
 			},
 			{
 				{
 					{ Syari, 4 },
-					{ Nori, 1 },
-					{ Kyuuri, 1 }
+		{ Nori, 1 },
+		{ Kyuuri, 1 }
 				}, KyuuriSushi
 			},
 			{
 				{
 					{ Syari, 4 },
-					{ Nori, 1 },
-					{ Makuro, 1 }
+		{ Nori, 1 },
+		{ Makuro, 1 }
 				}, TeekaSushi
 			},
 			{
 				{
 					{ Syari, 1 },
-					{ Amaebi, 1 }				
+		{ Amaebi, 1 }
 				}, AmaebiSushi
 			},
 			{
 				{
 					{ Syari, 2 },
-					{ Ebi, 2 }
+		{ Ebi, 2 }
 				}, EbiSushi
 			},
 		};
 
+		// 組み合わせを比較しながら作れる寿司を探して空いてる寿司皿に適応させる
 		int nextSara = -1;
 		for (auto& r : recepies) {
-			nextSara = checkSushi(r.recepie, r.kekka);
-			if (nextSara >= 0) {
+			nextSara = CheckSushi(r);
+			if (nextSara >=0) {
+				//寿司を出す
 				allsushi_Initialize(14, 10, nextSara);
 				break;
 			}
@@ -1190,7 +1166,7 @@ void Game::makisu_UpDate(Sushi& c_, POINT p_, Sushi& md_)
 		for (int i = 0; i < 9; ++i)
 			neta[i].kaisu = 0;
 
-		//クリック回数も0に戻す
+		//クリック回数も0に戻る
 		neta[Neta_Maxnum].kaisu = 0;
 	}
 }
@@ -1204,6 +1180,20 @@ void Game::makisu_Render(Sushi& c_)
 		draw.Offset(c_.x * 32, c_.y * 32);
 		ML::Box2D src(0, 0, 718, 759);
 		DG::Image_Draw("makisuImg", draw, src);
+	}
+	else {
+		ML::Box2D draw(-14, -46, 128, 128);
+		c_.hitBase = draw;
+		draw.Offset(c_.x * 32, c_.y * 32);
+		ML::Box2D src(0, 0, 718, 759);
+		DG::Image_Draw("shippai_sushiImg", draw, src);
+	}
+	if (c_.active == false) {
+		c_.Cnt++;
+		if (c_.Cnt > 60) {
+			c_.active = true;
+			c_.Cnt = 0;
+		}
 	}
 }
 //----------------------------------------------------------------
@@ -1374,7 +1364,7 @@ void Game::Sushi_Check(Sushi& md_, POINT p_, Keisan& ku_)
 		break;
 	}
 	//クリック回数を８超えたら
-	if (ku_.kaisu > 8) { ku_.kaisu =-1; }
+	if (ku_.kaisu > 8) { ku_.kaisu = 0; }
 }
 //----------------------------------------------------------------
 //寿司情報を読み込む
@@ -1403,7 +1393,7 @@ void Game::Sushi_Render(Sushi&md_)
 {
 	for (int y = 0; y < 17; ++y) {
 		for (int x = 0; x < 30; ++x) {
-			if (md_.arr[y][x] < Neta_Maxnum && neta[md_.arr[y][x]].nokori >= 0) {
+			if (md_.arr[y][x] < Neta_Maxnum && neta[md_.arr[y][x]].nokori >=0) {
 				ML::Box2D  draw(0, 0, 32, 32);
 				draw.Offset(x * 32, y * 32);		//表示位置を調整
 				DG::Image_Draw("sushisozaiImg", draw, md_.chip[md_.arr[y][x]]);
@@ -1412,7 +1402,7 @@ void Game::Sushi_Render(Sushi&md_)
 				if (md_.arr[y][x] >= 0 && md_.arr[y][x] <= 9) {
 					ML::Box2D textBox(-7, 20, 32, 32);		//残り個数の位置
 					textBox.Offset(x * 32, y * 32);			//表示位置を調整
-					string text = to_string(neta[md_.arr[y][x]].nokori);
+					string text = to_string(neta[md_.arr[y][x]].nokori - neta[md_.arr[y][x]].kaisu);
 					DG::Font_Draw("FontB", textBox, text, ML::Color(1, 1, 1, 1));		//白色
 				}
 			}
@@ -1469,20 +1459,13 @@ void Game::toukei_Initialize()
 {
 	//マウスでクリック回数
 	neta[Neta_Maxnum].kaisu = 0;
+
+	
 	//それぞれのネタ残り個数
-	neta[Syari].nokori = 10;
-	neta[Tamako].nokori = 10;
-	neta[Samon].nokori = 10;
-	neta[Nori].nokori = 10;
-	neta[Makuro].nokori = 10;
-	neta[Ikura].nokori = 10;
-	neta[Kyuuri].nokori = 10;
-	neta[Amaebi].nokori = 10;
-	neta[Ebi].nokori = 10;
-	//それぞれのネタのクリック回数
-	neta[Syari].kaisu = 0, neta[Samon].kaisu = 0, neta[Tamako].kaisu = 0;
-	neta[Makuro].kaisu = 0, neta[Ikura].kaisu = 0, neta[Nori].kaisu = 0;
-	neta[Kyuuri].kaisu = 0, neta[Amaebi].kaisu = 0, neta[Ebi].kaisu = 0;
+	for (int i = 0; i < 9; ++i) {
+		neta[i].nokori = 9;			//それぞれのネタ残り個数初期化
+		neta[i].kaisu = 0;			//それぞれのネタのクリック回数初期化
+	}
 
 	//ネタの値段
 	neta[Syari].money = 50;
@@ -1503,30 +1486,29 @@ int Game::CheckDisabledSushi()
 //寿司廃棄処理(未)
 void Game::allsushi_dispose(Sushi& asu_, POINT p_)
 {
-	if (asu_.active == true) {
-		ML::Box2D me = asu_.hitBase.OffsetCopy(float(asu_.x)* 32.0f, float(asu_.y)* 32.0f);
-		//if (mouse.LB.on) {
-			if (asu_.motion == Dead) {
-				me.x = asu_.x;
-				me.y = asu_.y;
-				//POINT now = { asu_.x,asu_.y };		//移動後
-				if (me.x <= p_.x &&p_.x < me.x + me.w&&me.y <= p_.y && p_.y < me.y + me.h) {
-					if (mouse.LB.down) {
-						asu_.befX = asu_.x;
-						asu_.befY = asu_.y;
-					}
-					if (mouse.LB.on){
-						asu_.x = float(p_.x);
-						asu_.y = float(p_.y);
-					}
-					if (mouse.LB.up) {
-						asu_.x = asu_.befX;
-						asu_.y = asu_.befY;
-					}
-				}
-			}
-		//}
-	}
+	//if (asu_.active == true) {
+	//	ML::Box2D me = asu_.hitBase.OffsetCopy(float(asu_.x)* 32.0f, float(asu_.y)* 32.0f);
+	//	//if (mouse.LB.on) {
+	//	if (asu_.motion == Dead) {
+	//		me.x = asu_.x;
+	//		me.y = asu_.y;
+	//		//POINT now = { asu_.x,asu_.y };		//移動後
+	//		if (me.x <= p_.x &&p_.x < me.x + me.w&&me.y <= p_.y && p_.y < me.y + me.h) {
+	//			if (mouse.LB.down) {
+	//				asu_.befX = asu_.x;
+	//				asu_.befY = asu_.y;
+	//			}
+	//			if (mouse.LB.on) {
+	//				asu_.x = float(p_.x);
+	//				asu_.y = float(p_.y);
+	//			}
+	//			if (mouse.LB.up) {
+	//				asu_.x = asu_.befX;
+	//				asu_.y = asu_.befY;
+	//			}
+	//		}
+	//	}
+	//}
 }
 //----------------------------------------------------------------
 //メニューの初期化
@@ -1604,7 +1586,7 @@ void Game::phone_UpDate(Seat& ph_, POINT p_)
 		if ((p_.x >= 6 && p_.x <= 7 && p_.y >= 6 && p_.y <= 7)) {
 			if (mouse.LB.down) {
 				toragu.active = true;
-				neta[Syari].nokori = 10;
+				neta[Syari].nokori = 9;
 				player.shikin -= neta[Syari].money;
 			}
 		}
@@ -1612,7 +1594,7 @@ void Game::phone_UpDate(Seat& ph_, POINT p_)
 		if ((p_.x >= 9 && p_.x <= 10 && p_.y >= 6 && p_.y <= 7)) {
 			if (mouse.LB.down) {
 				toragu.active = true;
-				neta[Tamako].nokori = 10;
+				neta[Tamako].nokori = 9;
 				player.shikin -= neta[Tamako].money;
 			}
 		}
@@ -1620,7 +1602,7 @@ void Game::phone_UpDate(Seat& ph_, POINT p_)
 		if ((p_.x >= 12 && p_.x <= 13 && p_.y >= 6 && p_.y <= 7)) {
 			if (mouse.LB.down) {
 				toragu.active = true;
-				neta[Samon].nokori = 10;
+				neta[Samon].nokori = 9;
 				player.shikin -= neta[Tamako].money;
 			}
 		}
@@ -1628,7 +1610,7 @@ void Game::phone_UpDate(Seat& ph_, POINT p_)
 		if ((p_.x >= 15 && p_.x <= 16 && p_.y >= 6 && p_.y <= 7)) {
 			if (mouse.LB.down) {
 				toragu.active = true;
-				neta[Nori].nokori = 10;
+				neta[Nori].nokori = 9;
 				player.shikin -= neta[Tamako].money;
 			}
 		}
@@ -1636,7 +1618,7 @@ void Game::phone_UpDate(Seat& ph_, POINT p_)
 		if ((p_.x >= 18 && p_.x <= 19 && p_.y >= 6 && p_.y <= 7)) {
 			if (mouse.LB.down) {
 				toragu.active = true;
-				neta[Makuro].nokori = 10;
+				neta[Makuro].nokori = 9;
 				player.shikin -= neta[Tamako].money;
 			}
 		}
@@ -1644,7 +1626,7 @@ void Game::phone_UpDate(Seat& ph_, POINT p_)
 		if ((p_.x >= 21 && p_.x <= 22 && p_.y >= 6 && p_.y <= 7)) {
 			if (mouse.LB.down) {
 				toragu.active = true;
-				neta[Ikura].nokori = 10;
+				neta[Ikura].nokori = 9;
 				player.shikin -= neta[Tamako].money;
 			}
 		}
@@ -1652,7 +1634,7 @@ void Game::phone_UpDate(Seat& ph_, POINT p_)
 		if ((p_.x >= 6 && p_.x <= 7 && p_.y >= 9 && p_.y <= 10)) {
 			if (mouse.LB.down) {
 				toragu.active = true;
-				neta[Kyuuri].nokori = 10;
+				neta[Kyuuri].nokori = 9;
 				player.shikin -= neta[Tamako].money;
 			}
 		}
@@ -1660,7 +1642,7 @@ void Game::phone_UpDate(Seat& ph_, POINT p_)
 		if ((p_.x >= 9 && p_.x <= 10 && p_.y >= 9 && p_.y <= 10)) {
 			if (mouse.LB.down) {
 				toragu.active = true;
-				neta[Amaebi].nokori = 10;
+				neta[Amaebi].nokori = 9;
 				player.shikin -= neta[Tamako].money;
 			}
 		}
@@ -1668,7 +1650,7 @@ void Game::phone_UpDate(Seat& ph_, POINT p_)
 		if ((p_.x >= 12 && p_.x <= 13 && p_.y >= 9 && p_.y <= 10)) {
 			if (mouse.LB.down) {
 				toragu.active = true;
-				neta[Ebi].nokori = 10;
+				neta[Ebi].nokori = 9;
 				player.shikin -= neta[Tamako].money;
 			}
 		}
