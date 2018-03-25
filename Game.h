@@ -18,10 +18,6 @@ protected:
 		std::map<int, int> recepie;
 		int kekka;
 	};
-	struct SushiRecepie {
-		std::map<int, int> recepie;
-		int kekka;
-	};
 
 	//õi‚Ì\‘¢‘Ì
 	struct Sushi {
